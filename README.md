@@ -28,4 +28,4 @@ Column Names Key:
  "Gene_Type" = type of gene (ie. Protein-coding, noncoding RNA, etc.);
 "Position_to_TSS" = base pair distance to translation start site (negative sign indicates feature is 5' (upstream) of translation start site, no sign indicates feature is 3' (downstream) of site);
 "Feature_Type" = position of feature observed, (N_Shore = upstream of CpG island, S_Shore = downstream of island, or Island = within CpG island).
----------------
+
