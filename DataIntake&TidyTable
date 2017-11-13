@@ -36,7 +36,7 @@ master <- rbind(methylhn, methylstomach, methylcolorectal, methyllung)
 
 ##Select pertainant variables, filter out observations missing data, tidy and unnest colon separated observations
 master <- select(master, -Transcript_ID, -Beta_value, -Gene_Symbol, -REF, -CGI_Coordinate) %>%
-  filter(master, Position_to_TSS != ".", Feature_Type != ".") %>%
+  filter(Position_to_TSS != ".", Feature_Type != ".") %>%
   mutate(Gene_Type = strsplit(as.character(Gene_Type), ";"), 
          Position_to_TSS = strsplit(as.character(Position_to_TSS), ";")) %>%
   unnest(Gene_Type, Position_to_TSS)
