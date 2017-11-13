@@ -1,0 +1,44 @@
+##Cancer DNA methylation data import and treatment
+##Malaika MB & Nick Perry
+##Intro to Data Science 2017
+
+library(dplyr)
+library(tidyr)
+
+#####Importing data
+columns <- c("REF", "Beta_value", "Chromosome", "Start", "End",
+             "Gene_Symbol", "Gene_Type", "Transcript_ID", "Position_to_TSS",
+             "CGI_Coordinate", "Feature_Type")
+
+#Import data from txt file on head and neck cancer
+methylhn <- read.table('headandneck.txt', header = TRUE, fill = TRUE)
+colnames(methylhn) <- columns
+methylhn <- methylhn[,1:11] %>% mutate( Cancer_Type = "Head&Neck")
+
+#Import data from txt file on stomach cancer
+methylstomach <- read.table('stomach.txt', header = TRUE, fill = TRUE)
+colnames(methylstomach) <- columns
+methylstomach <- methylstomach[,1:11] %>% mutate( Cancer_Type = "Stomach")
+
+#Import data from txt file on lung cancer
+methyllung <- read.table('lung.txt', header = TRUE, fill = TRUE)
+colnames(methyllung) <- columns
+methyllung <- methyllung[,1:11] %>% mutate(Cancer_Type = "Lung")
+
+#Import data from txt file on colorectal cancer
+methylcolorectal <- read.table('colorectal.txt', header = TRUE, fill = TRUE)
+colnames(methylcolorectal) <- columns
+methylcolorectal <- methylcolorectal[,1:11] %>% mutate(Cancer_Type = "Colorectal")
+
+########Combining, tidying data fram
+##Combine all tables into master data frame
+master <- rbind(methylhn, methylstomach, methylcolorectal, methyllung)
+
+##Select pertainant variables, filter out observations missing data, tidy and unnest colon separated observations
+master <- select(master, -Transcript_ID, -Beta_value, -Gene_Symbol, -REF, -CGI_Coordinate) %>%
+  filter(master, Position_to_TSS != ".", Feature_Type != ".") %>%
+  mutate(Gene_Type = strsplit(as.character(Gene_Type), ";"), 
+         Position_to_TSS = strsplit(as.character(Position_to_TSS), ";")) %>%
+  unnest(Gene_Type, Position_to_TSS)
+
+head(master)
